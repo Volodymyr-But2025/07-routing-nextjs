@@ -44,7 +44,7 @@
 //     />
 //   );
 // }
-import type { ComponentType } from "react";
+
 import ReactPaginate from "react-paginate"; // 👈 Імпортуємо напряму як дефолтний експорт
 import css from "./Pagination.module.css";
 
