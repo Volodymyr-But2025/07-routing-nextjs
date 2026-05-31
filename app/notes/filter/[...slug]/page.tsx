@@ -19,8 +19,9 @@ const NotesPage = async ({ params }: NotesPageProps) => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["notes", "", 1],
-    queryFn: () => fetchNotes({ query: "", page: 1, ...(filter !== "All" && { filter }) }),
+    queryKey: ["notes", filter, 1],
+    queryFn: () =>
+      fetchNotes({ query: "", page: 1, ...(filter !== "All" && { filter }) }),
   });
 
   const dehydratedState: DehydratedState = dehydrate(queryClient);
