@@ -20,16 +20,22 @@ export interface CreateNotePayload {
   tag: NoteTag;
 }
 
-export const fetchNotes = async (
-  query: string,
-  page: number,
-): Promise<FetchNotesResponse> => {
+export const fetchNotes = async ({
+  query,
+  page,
+  filter,
+}: {
+  query: string;
+  page: number;
+  filter?: string;
+}): Promise<FetchNotesResponse> => {
   const { data } = await axios.get<FetchNotesResponse>("/notes", {
     params: {
       search: query,
       page,
       perPage: 12,
       sortBy: "created",
+      ...(filter ? { tag: filter } : {}),
     },
   });
 

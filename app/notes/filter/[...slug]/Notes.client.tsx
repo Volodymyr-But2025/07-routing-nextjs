@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchNotes, type FetchNotesResponse } from "@/lib/api";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import NoteList from "@/components/NoteList/NoteList";
@@ -10,13 +10,13 @@ import Modal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
 import { useDebouncedCallback } from "use-debounce";
 
-function NotesClient() {
+function NotesClient({ filter }: { filter?: string }) {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const queryKey = useMemo(
-    () => ["Notes", query, page] as const,
+    () => ["notes", query, page] as const,
     [query, page],
   );
 
@@ -26,9 +26,9 @@ function NotesClient() {
     FetchNotesResponse
   >({
     queryKey,
-    queryFn: () => fetchNotes(query, page),
+    queryFn: () => fetchNotes({ query, page, ...(filter && { filter }) }),
     staleTime: 1000 * 60,
-    placeholderData: keepPreviousData,
+    refetchOnMount: false,
   });
 
   const notes = data?.notes ?? [];
